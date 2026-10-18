@@ -1,0 +1,10 @@
+"quantity","parameters","n0","n","source","value"
+"EVPI","all",NA,NA,"Appendix B",5479.7766
+"EVPPI","MeanVisitsA",NA,NA,"Box 1",989.5752
+"EVSI","MeanVisitsA","10","100","Box 1",885.7385
+"EVPPI","ProbFailingA",NA,NA,"Appendix B",1932.3211
+"EVSI","ProbFailingA","10","100","Appendix B",1792.8348
+"EVPPI","MeanVisitsA + ProbFailingA",NA,NA,"Appendix B",2879.3431
+"EVSI","MeanVisitsA + ProbFailingA","10, 10","100, 100","Appendix B case 1",2674.0578
+"EVSI","MeanVisitsA + ProbFailingA","10, 50","100, 100","Appendix B case 2",2304.832
+"EVSI","MeanVisitsA + ProbFailingA","10, 50","100, 1000","Appendix B case 3",2735.9219
