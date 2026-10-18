@@ -65,15 +65,26 @@ data/                Example PSA dataset (see data/README.md)
 results/             Expected results
 tests/               Reproducibility and correctness checks
 MDM_2017_Appendix/   Original files as published with the paper (unchanged)
+renv.lock, renv/     Recorded package versions (see Reproducible environment)
 ```
 
 ## Requirements
 
-- R (tested with R 4.3.3)
+- R (tested with R 4.3.3 and 4.5.2)
 - [mgcv](https://cran.r-project.org/package=mgcv) and [matrixStats](https://cran.r-project.org/package=matrixStats)
 - For the MCMC examples only: [JAGS](https://mcmc-jags.sourceforge.io) and [R2jags](https://cran.r-project.org/package=R2jags)
 
-The paper used mgcv 1.8-17. All EVPI, EVPPI, and EVSI values are identical with mgcv 1.8-17 and 1.9-1.
+The paper used mgcv 1.8-17. All EVPI, EVPPI, and EVSI values are identical with mgcv 1.8-17, 1.9-1, and 1.9-3.
+
+### Reproducible environment (renv)
+
+The exact package versions used to check the results (R 4.5.2, mgcv 1.9-3, matrixStats 1.5.0, R2jags 0.8-9, JAGS 4.3.1) are recorded in [`renv.lock`](renv.lock) with [renv](https://rstudio.github.io/renv/). When you open the project, renv activates automatically. To install the recorded versions into a project-specific library, run:
+
+```r
+renv::restore()
+```
+
+renv does not install R or JAGS; install those separately. If you only want to use `R/GA_functions.R` in your own project, you do not need renv: copy the file and install mgcv and matrixStats.
 
 ## Errata and changes
 

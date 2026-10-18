@@ -9,6 +9,7 @@ Repository reorganized for reproducibility. The original files published with th
 - `tests/test_GA_functions.R`: checks that the maintained functions reproduce the published results, that EVSI tends to EVPPI as the sample size grows and to zero when it is zero, and that the data reproduce Table D.2 of the supplement.
 - `results/expected_results.csv`: reference EVPI, EVPPI, and EVSI values.
 - `CITATION.cff`, `data/README.md` (data dictionary).
+- `renv.lock`: package versions used to check the results (R 4.5.2), restorable with `renv::restore()`.
 
 ## Fixes
 
