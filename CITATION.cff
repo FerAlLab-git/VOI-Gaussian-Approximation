@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the article below and this software."
+title: "VOI-Gaussian-Approximation: R code for the Gaussian approximation approach to value of information analysis"
+version: 2.0.0
+license: MIT
+repository-code: "https://github.com/FerAlLab-git/VOI-Gaussian-Approximation"
+authors:
+  - family-names: Alarid-Escudero
+    given-names: Fernando
+    affiliation: Stanford University
+  - family-names: Jalal
+    given-names: Hawre
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.3263876
+    description: "Version 1.0.0 archived on Zenodo"
+keywords:
+  - value of information
+  - expected value of sample information
+  - EVSI
+  - EVPPI
+  - decision analysis
+  - R
+preferred-citation:
+  type: article
+  title: "A Gaussian Approximation Approach for Value of Information Analysis"
+  authors:
+    - family-names: Jalal
+      given-names: Hawre
+    - family-names: Alarid-Escudero
+      given-names: Fernando
+  journal: "Medical Decision Making"
+  year: 2018
+  volume: 38
+  issue: 2
+  start: 174
+  end: 188
+  doi: 10.1177/0272989X17715627

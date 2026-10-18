@@ -40,3 +40,5 @@ vignettes/*.pdf
 
 # Mac OS Environment Variables
 .DS_Store
+# macOS folder icon files
+Icon
