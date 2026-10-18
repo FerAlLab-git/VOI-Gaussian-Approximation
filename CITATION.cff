@@ -2,6 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite the article below and this software."
 title: "VOI-Gaussian-Approximation: R code for the Gaussian approximation approach to value of information analysis"
 version: 2.0.0
+date-released: 2026-10-18
+doi: 10.5281/zenodo.3263875
 license: MIT
 repository-code: "https://github.com/FerAlLab-git/VOI-Gaussian-Approximation"
 authors:
@@ -11,6 +13,12 @@ authors:
   - family-names: Jalal
     given-names: Hawre
 identifiers:
+  - type: doi
+    value: 10.5281/zenodo.3263875
+    description: "All versions on Zenodo (always resolves to the latest version)"
+  - type: doi
+    value: 10.5281/zenodo.23453979
+    description: "Version 2.0.0 archived on Zenodo"
   - type: doi
     value: 10.5281/zenodo.3263876
     description: "Version 1.0.0 archived on Zenodo"
