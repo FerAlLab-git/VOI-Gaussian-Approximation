@@ -1,6 +1,6 @@
 # VOI-Gaussian-Approximation 2.0.0
 
-Repository reorganized for reproducibility. The original files published with the paper are kept unchanged in `MDM_2017_Appendix/`.
+Repository reorganized for reproducibility. The original files published with the paper are kept unchanged in `MDM_2017_Appendix/`. Archived on Zenodo: [doi:10.5281/zenodo.23453979](https://doi.org/10.5281/zenodo.23453979).
 
 ## New
 

@@ -1,6 +1,6 @@
 # VOI-Gaussian-Approximation
 
-[![DOI](https://zenodo.org/badge/95931212.svg)](https://zenodo.org/badge/latestdoi/95931212)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3263875.svg)](https://doi.org/10.5281/zenodo.3263875)
 
 R code for the Gaussian approximation (GA) method to compute the **expected value of sample information (EVSI)** from a single probabilistic sensitivity analysis (PSA), as described in:
 
