@@ -23,6 +23,9 @@
 #*     first letter of their label.
 #*   - Informative errors for unsupported models (parametric terms other
 #*     than the intercept, t2 smooths).
+#* Development version:
+#*   - te() smooths work: their absorbed identifiability constraint is
+#*     handled by expressing the fitted smooth in the unconstrained basis.
 #**************************************************************************
 
 #' Expected conditional loss under the Gaussian approximation
@@ -65,31 +68,53 @@ predict.ga <- function(object, n, n0, verbose = TRUE) {
     print(paste("Variance reduction factor =", round(v.ga, 3)))
   }
 
-  ### Initialize matrix for preposterior of all basis functions
-  n.smooth <- length(object$smooth)
-  X <- matrix(NA, nrow(object$model), length(object$coefficients))
-  X[, 1] <- 1
+  ### Expected conditional loss: intercept plus the preposterior of each smooth
+  Beta <- coef(object)
+  Ltilde <- rep(Beta[[1]], nrow(object$model))
 
-  for (k in seq_len(n.smooth)) {
-    sm <- object$smooth[[k]]
+  for (sm in object$smooth) {
     if (inherits(sm, "t2.smooth")) {
       stop("t2() smooths are not supported; use te() or ti() instead.")
     }
+    Beta.sm <- Beta[sm$first.para:sm$last.para]
     if (inherits(sm, "tensor.smooth")) {
       ## One factor per margin, matched by the margin's parameter name
       v.margin <- vapply(sm$margin, function(mg) v.ga[[mg$term[1]]], numeric(1))
       Xfrag <- Predict.matrix.tensor.smooth.ga(sm, data, v.margin)
+      ## te() smooths carry an identifiability constraint that mgcv absorbs
+      ## into the basis, so their coefficients do not apply to the
+      ## unconstrained tensor product built from the shrunken margins
+      if (ncol(Xfrag) != length(Beta.sm)) {
+        Beta.sm <- tensor.coef.unconstrained(sm, data, Beta.sm)
+      }
     } else {
       Xfrag <- Predict.smooth.ga(sm, data, v.ga[[sm$term[1]]])
     }
-    X[, sm$first.para:sm$last.para] <- Xfrag
+    Ltilde <- Ltilde + as.vector(Xfrag %*% Beta.sm)
   }
 
-  ### Expected conditional loss
-  Beta <- coef(object)
-  Ltilde <- X %*% Beta
+  return(matrix(Ltilde, ncol = 1))
+}
 
-  return(Ltilde)
+tensor.coef.unconstrained <- function(object, data, Beta.sm) {
+  #### Coefficients that give the fitted smooth `object` in its unconstrained
+  #### tensor product basis. mgcv absorbs the sum-to-zero constraint of a te()
+  #### smooth into its basis; the GA shrinks each margin before the tensor
+  #### product is formed, which gives the unconstrained basis. The coefficients
+  #### are unique when that basis has full column rank, and shrinking keeps the
+  #### smooth's constant part because each margin's basis includes the constant.
+  X.unc <- Predict.matrix.tensor.smooth.ga(object, data, rep(1, length(object$margin)))
+  fit.sm <- PredictMat(object, data) %*% Beta.sm
+  qr.unc <- qr(X.unc)
+  if (qr.unc$rank < ncol(X.unc)) {
+    stop("The basis of ", object$label, " is rank deficient on these data; ",
+         "use a smaller k.")
+  }
+  Beta.unc <- qr.coef(qr.unc, fit.sm)
+  if (max(abs(X.unc %*% Beta.unc - fit.sm)) > 1e-6 * max(1, max(abs(fit.sm)))) {
+    stop("The fitted ", object$label, " cannot be written in its unconstrained basis.")
+  }
+  return(as.vector(Beta.unc))
 }
 
 match_to_params <- function(x, param.names, arg) {
@@ -144,7 +169,7 @@ Predict.matrix.tensor.smooth.ga <- function(object,
     for (j in seq_along(term)) {
       dat[[term[j]]] <- data[[term[j]]]
     }
-    X[[i]] <- if (!is.null(object$mc[i]))
+    X[[i]] <- if (isTRUE(object$mc[i]))
       PredictMat(object$margin[[i]], dat, n = length(dat[[1]]))
     else Predict.matrix(object$margin[[i]], dat)
     n.obs <- nrow(X[[i]])
