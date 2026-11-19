@@ -1,3 +1,10 @@
+# VOI-Gaussian-Approximation (development version)
+
+## Fixes
+
+- **`predict.ga()` with `te()` smooths.** `te()` smooths failed with "number of items to replace is not a multiple of replacement length", although they were documented as supported. mgcv absorbs the identifiability constraint of a `te()` smooth into its basis, so the smooth has one coefficient fewer than the tensor product of its margins that the GA builds. `predict.ga()` now expresses the fitted smooth in the unconstrained tensor product basis before applying the GA. For `L = a * b`, it matches the exact preposterior mean and the result from `s(a) + s(b) + ti(a, b)` (checked in `tests/test_GA_functions.R`). Results for `s()` and `ti()` models, including all results in the paper, are unchanged.
+- Tensor-product margins now use mgcv's own test of the margin constraint (`isTRUE(mc[i])`, as in `mgcv:::Predict.matrix.tensor.smooth`) instead of `!is.null(mc[i])`, which was always true.
+
 # VOI-Gaussian-Approximation 2.0.0
 
 Repository reorganized for reproducibility. The original files published with the paper are kept unchanged in `MDM_2017_Appendix/`. Archived on Zenodo: [doi:10.5281/zenodo.23453979](https://doi.org/10.5281/zenodo.23453979).

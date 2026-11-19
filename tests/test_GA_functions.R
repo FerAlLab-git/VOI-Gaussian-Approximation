@@ -76,4 +76,22 @@ want <- expected$value[expected$source %in% c("Appendix B", "Appendix B case 1",
                          expected$quantity == "EVSI"]
 check(max(abs(got - want)) < 1e-2, "EVSI values match results/expected_results.csv")
 
+## 6. te() smooths: mgcv absorbs their identifiability constraint into the basis
+set.seed(4)
+sim <- data.frame(a = rnorm(5000, 1), b = rnorm(5000, 2))
+sim$y <- sim$a * sim$b + 0.01 * rnorm(5000)
+m.te <- gam(y ~ te(a, b), data = sim)
+check(max(abs(ga(new, m.te, 1e12, 1) - fitted(m.te))) < 1e-4,
+      "te(): n -> Inf reproduces fitted values")
+## For L = a * b with independent a and b, the preposterior mean is the product
+## of the shrunken parameters, which the margins represent exactly
+va <- sqrt(100 / 110); vb <- sqrt(10 / 50)
+exact <- (mean(sim$a) + va * (sim$a - mean(sim$a))) * (mean(sim$b) + vb * (sim$b - mean(sim$b)))
+check(max(abs(ga(new, m.te, c(a = 100, b = 10), c(a = 10, b = 40)) - exact)) < 0.01,
+      "te(): matches the exact preposterior mean of a bilinear loss")
+m.ti <- gam(y ~ s(a) + s(b) + ti(a, b), data = sim)
+check(max(abs(ga(new, m.te, c(a = 100, b = 10), c(a = 10, b = 40)) -
+              ga(new, m.ti, c(a = 100, b = 10), c(a = 10, b = 40)))) < 0.01,
+      "te() and s() + s() + ti() give the same preposterior")
+
 cat("\nAll checks passed (mgcv ", as.character(packageVersion("mgcv")), ").\n", sep = "")
